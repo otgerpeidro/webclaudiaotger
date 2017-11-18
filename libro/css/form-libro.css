@@ -1,0 +1,24 @@
+body {
+        padding-top: 54px;
+      }
+@media (min-width: 992px) {
+        body {
+          padding-top: 56px;
+        }
+      }
+.header {
+        color: #36A0FF;
+        font-size: 27px;
+        padding: 2px;
+    }
+.bigicon {
+        font-size: 35px;
+        color: #B2283C;
+    }
+.bg-dark {
+    background-color: #B22738!important;
+    }
+.btn-primary {
+        background-color: #B2283C;
+        border-color: #B2283C;
+    }
