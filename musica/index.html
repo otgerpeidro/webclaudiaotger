@@ -84,13 +84,13 @@
                         <div class="form-group">
                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
                             <div class="col-md-8">
-                                <input id="artist" name="name" type="text" placeholder="Artista" class="form-control" required>
+                                <input id="artist" name="artist" type="text" placeholder="Artista" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-music bigicon"></i></span>
                             <div class="col-md-8">
-                                <input id="song" name="name" type="text" placeholder="Canci&oacute;n" class="form-control" required>
+                                <input id="song" name="song" type="text" placeholder="Canci&oacute;n" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -98,6 +98,9 @@
                                 <button type="submit" class="btn btn-primary btn-lg">&iexcl;La quiero bailar!</button>
                             </div>
                         </div>
+                        <div class="form-group">
+                          <div class="col-md-12 text-center" id="dance"></div>
+                      </div>
                     </fieldset>
                 </form>
             </div>
@@ -274,6 +277,103 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+     <!-- Funciones de GET y POST del formulario  -->
+   <script>
+    // GET
+     /*  fetch('../apiv1/canciones')
+         .then(status)
+         .then(json)
+         .then(function(data) {
+           console.log('Request succeeded with JSON response', data);
+           var count = Object.keys(data.result).length;
+           var i = 0;
+           var out = "";
+           for (var key in data.result) {
+             if (data.result.hasOwnProperty(key)){
+               i++;
+               out += '<p>' + data.result[key].artist + ' ' + data.result[key].song + '<p>';
+             }
+           }
+           document.getElementById("dance").innerHTML = out;
+         }).catch(function(error) {
+           console.log('Request failed', error);
+         }); */
+ 
+         // POST
+       const handleFormSubmit = event => {          
+           // Stop the form from submitting since we’re handling that with AJAX.
+             event.preventDefault();
+          // Call our function to get the form data.
+             const formData = formToJSON(form.elements);
+             const formDataURLEncoded = JSON_to_URLEncoded(formData);
+             console.log(formDataURLEncoded);
+             //alert(JSON.stringify(formData, null, " "));
+           fetch('../apiv1/canciones', {
+               method: 'post',
+               headers: {
+                   "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+               },   
+               body: formDataURLEncoded
+             })
+             .then(json)
+             .then(function (data) {
+                   console.log('Request succeeded with JSON response', data);
+                   document.getElementById("artist").value = '';
+                  document.getElementById("song").value = '';
+                  if (data.success) { 
+                       document.getElementById("dance").innerHTML = '<p> <b> Añadida a la lista, ¡Vamos a bailarla! </b> </p>';
+                   //location.reload(true);
+                   }else {
+                       document.getElementById("dance").innerHTML = '<p> <b> Esta canción ya está en la lista </b> </p>';
+                       console.log(data.success);
+                     }
+               })
+             .catch(function (error) {
+                 console.log('Request failed', error);
+               });
+       };
+ 
+       const form = document.getElementsByClassName('form-horizontal')[0];
+       form.addEventListener('submit', handleFormSubmit);
+ 
+       const isValidElement = element => {
+                 return element.name && element.value;
+       };
+ 
+      const formToJSON = elements => [].reduce.call(elements, (data, element) => {
+               // Make sure the element has the required properties.
+               if (isValidElement(element)) {
+                 data[element.name] = element.value;
+               }
+               return data;
+      }, {});
+         
+      function JSON_to_URLEncoded(element,key,list){
+             var list = list || [];
+             if(typeof(element)=='object'){
+               for (var idx in element)
+                 JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+             } else {
+               list.push(key+'='+encodeURIComponent(element));
+             }
+             return list.join('&');
+       }
+     
+       function status(response) {
+             if (response.status >= 200 && response.status < 300) {
+               return Promise.resolve(response)
+             } else {
+               return Promise.reject(new Error(response.statusText))
+             }
+       }
+ 
+       function json(response) {
+            // console.log(response.json());
+             return response.json();
+       } 
+     </script>
+
 
   </body>
 
