@@ -149,7 +149,7 @@
   <script>
     // GET
     /*
-       fetch('../apiv1/asistentes')
+       fetch('https://api.claudiaotger.com/apiv1/asistentes')
          .then(status)
          .then(json)
          .then(function(data) {
@@ -177,7 +177,7 @@
              const formDataURLEncoded = JSON_to_URLEncoded(formData);
              console.log(formDataURLEncoded);
              //alert(JSON.stringify(formData, null, " "));
-           fetch('../apiv1/asistentes', {
+           fetch('https://api.claudiaotger.com/apiv1/asistentes', {
                method: 'post',
                headers: {
                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
